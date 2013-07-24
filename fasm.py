@@ -121,7 +121,7 @@ def interpret():
 				retr = do(instruction[i], '', board)
 			i += 1
 			if not retr == '':
-				print(retr, end=',')
+				print(retr, end='')
 		print()
 		instruction = input(':')
 
