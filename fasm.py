@@ -121,7 +121,7 @@ def interpret():
 				retr = do(instruction[i], '', board)
 			i += 1
 			if not retr == '':
-				print(retr, end='')
+				print(retr, end=',')
 		print()
 		instruction = input(':')
 
@@ -146,11 +146,11 @@ if __name__ == '__main__':
 			i = 0
 			while i < len(instructions):
 				if instructions[i] == ',' and i + 1 < len(instructions):
-					print(do(instructions[i], instructions[i+1], board), end='')
+					print(do(instructions[i], instructions[i+1], board), end=',')
 					i += 2
 					continue
 				else:
-					print(do(instructions[i], '', board), end='')
+					print(do(instructions[i], '', board), end=',')
 				i += 1
 	else:
 		interpret()
