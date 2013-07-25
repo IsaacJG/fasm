@@ -40,7 +40,11 @@ This is essentially a BF clone, with some minor differences (I think, don't actu
 <<.		print "l"
 <<<.	print "d"
 ```
-This example uses a loop to get ballpark values for the characters, then goes through and makes any changes necessary to the values, then goes to the various slots to print each letter at the desired time
+This example uses a loop to get ballpark values for the characters, then goes through and makes any changes necessary to the values, then goes to the various slots to print each letter at the desired time. Since all characters that are not part of the instruction set (See the [Reference](#reference) section) are ignored, this can be minified into the following program:
+```
+++++++++++[>++++++++++>++++++++++>++++++++++>+++++++++++>+++++++++++>+++++++++++>++++++++++++>+++<<<<<<<<-]>>+>++++>-->+>++++>->++<<<<<.<.>>..>.>>>.<.<<.>.<<.<<<.
+```
+Exact same thing, just much harder to read.
 
 ### Reference
 * > go to next slot
