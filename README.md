@@ -56,6 +56,7 @@ Exact same thing, just much harder to read.
 * , prompt for input, places input into current slot
 * [ begin a loop declaration
 * ] mark the end of a loop declaration
+* / copy the current value to the next slot
 
 Good luck have fun!
 
