@@ -43,7 +43,7 @@ class Pointer:
 	def right_loop(self):
 		self.loop_right = self.loc
 
-def do(instruction, pointer):
+def do(instruction, pointer, n):
 	INSTRUCTION_MAP = {
 		'>': pointer.up,
 		'<': pointer.down,
@@ -66,6 +66,8 @@ def do(instruction, pointer):
 					INSTRUCTION_MAP[i]()
 	except KeyError:
 		pass
+	except ValueError:
+		retr = 'ERROR: tried to print invalid char "{0}" on instruction {1}'.format(pointer.array[pointer.loc], n)
 	return retr or ''
 
 def parse(raw):
@@ -93,7 +95,9 @@ if __name__ == '__main__':
 	with open(sys.argv[1], 'r') as file:
 		instructions = parse(file.read())
 	pointer = Pointer([0 for i in range(128)])
+	n = 0
 	for instruction in instructions:
-		retr = do(instruction, pointer)
+		retr = do(instruction, pointer, n)
 		if not retr == '':
 			print(retr, end='')
+		n += 1
