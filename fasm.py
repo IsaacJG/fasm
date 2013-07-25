@@ -30,7 +30,7 @@ class Pointer:
 		return chr(hold)
 
 	def get(self):
-		return self.array[self.loc]
+		return chr(self.array[self.loc])
 
 	def put(self):
 		char = input(',:')
