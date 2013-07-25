@@ -44,7 +44,7 @@ class Pointer:
 	def pop(self):
 		hold = self.array[self.loc]
 		self.array[self.loc] = 0
-		return chr(hold)
+		return '{0}\n'.format(hold)
 
 	def get(self):
 		return chr(self.array[self.loc])
