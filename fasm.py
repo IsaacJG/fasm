@@ -61,8 +61,10 @@ class Pointer:
 		self.loop_right = self.loc
 
 	def copy(self):
-		val = self.array[self.loc]
-		self.array[self.loc+1] = val
+		hold = self.array[self.loc]
+		self.up()
+		self.array[self.loc] = hold
+		self.down()
 
 def do(instruction, pointer, n):
 	INSTRUCTION_MAP = {
@@ -97,7 +99,7 @@ def parse(raw):
 	looping = False
 	loop = []
 	for c in raw:
-		if c in '><+-^.,':
+		if c in '><+-^.,/':
 			if not looping:
 				parsed_instructions.append(c)
 			if looping:
