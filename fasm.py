@@ -15,31 +15,30 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
-
 BOARD_SIZE = 16
 
-class Board:
-	def __init__(self, size):
-		self.pointer = 0
-		self.size = size
-		self.__board__ = [' ' for i in range(size+1)]
+class Pointer:
+	def __init__(self, array):
+		self.loc = 0
+		self.length = len(array)
+		self.array = array
 
 	def inc(self):
-		self.pointer += 1
-		if self.pointer >= self.size:
-			self.pointer = 0
-	
+		self.loc += 1
+		if self.loc >= self.length:
+			self.loc = 0
+
 	def dec(self):
-		self.pointer -= 1
-		if self.pointer < 0:
-			self.pointer = self.size-1
-	
+		self.loc -= 1
+		if self.loc < 0:
+			self.loc = self.length-1
+
 	def clear(self):
-		self.__board__[self.pointer] = ' '
-	
+		self.array[self.loc] = ' '
+
 	def get(self):
-		return self.__board__[self.pointer]
-	
+		return self.array[self.loc]
+
 	def pop(self):
 		hold = self.get()
 		self.clear()
@@ -48,7 +47,7 @@ class Board:
 	def put(self, char):
 		if str(char).isdigit():
 			char = int(char)
-		self.__board__[self.pointer] = char
+		self.array[self.loc] = char
 
 	def arithmetic(self, operator):
 		first = self.pop()
@@ -83,23 +82,23 @@ class Board:
 def null():
 	pass
 
-def do(instruction, peek, board):
+def do(instruction, peek, pointer):
 	retr = ''
 	if instruction == ',':
-		retr = board.put(peek)
+		retr = pointer.put(peek)
 	else:
 		try:
 			retr = {
 			'': null,
-			'>': board.inc,
-			'<': board.dec,
-			'^': board.pop,
-			'.': board.get,
-			'+': board.add,
-			'-': board.sub,
-			'*': board.mult,
-			'/': board.div,
-			'%': board.mod
+			'>': pointer.inc,
+			'<': pointer.dec,
+			'^': pointer.pop,
+			'.': pointer.get,
+			'+': pointer.add,
+			'-': pointer.sub,
+			'*': pointer.mult,
+			'/': pointer.div,
+			'%': pointer.mod
 			}[instruction]()
 		except KeyError:
 			print('ERROR: invalid instruction')
@@ -107,18 +106,18 @@ def do(instruction, peek, board):
 
 
 def interpret():
-	board = Board(BOARD_SIZE)
+	pointer = Pointer([' ' for i in range(BOARD_SIZE)])
 	instruction = ''
 	put = False
 	while not instruction == 'x':
 		i = 0
 		while i < len(instruction):
 			if instruction[i] == ',' and i + 1 < len(instruction):
-				do(instruction[i], instruction[i+1], board)
+				do(instruction[i], instruction[i+1], pointer)
 				i += 2
 				continue
 			else:
-				retr = do(instruction[i], '', board)
+				retr = do(instruction[i], '', pointer)
 			i += 1
 			if not retr == '':
 				print(retr, end='')
@@ -134,23 +133,23 @@ if __name__ == '__main__':
 			interpret()
 		else:
 			instructions = ''
-			board = None
+			pointer = None
 			with open(argv[0], 'r') as file:
 				instructions = file.read().split('\n')
 				if instructions[0].isdigit():
-					board = Board(int(instructions[0]))
+					pointer = Pointer([' ' for i in range(int(instructions[0]))])
 					instructions = instructions[1]
 				else:
 					instructions = instructions[0]
-					board = Board(BOARD_SIZE)
+					pointer = Pointer([' ' for i in range(BOARD_SIZE)])
 			i = 0
 			while i < len(instructions):
 				if instructions[i] == ',' and i + 1 < len(instructions):
-					print(do(instructions[i], instructions[i+1], board), end=',')
+					print(do(instructions[i], instructions[i+1], pointer), end=',')
 					i += 2
 					continue
 				else:
-					print(do(instructions[i], '', board), end=',')
+					print(do(instructions[i], '', pointer), end=',')
 				i += 1
 	else:
 		interpret()
