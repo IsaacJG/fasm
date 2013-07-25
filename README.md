@@ -1,34 +1,57 @@
 Fasm
 ====
-# Fasm is an esoteric language inspired by the [Funges](https://en.wikipedia.org/wiki/Funge#Funges)
-I guess this could be called a fungeoid(?)
+# Fasm is an esoteric language inspired by the [Funges](https://en.wikipedia.org/wiki/Funge#Funges) and [BF](https://en.wikipedia.org/wiki/Brainfuck)
+This is essentially a BF clone, with some minor differences (I think, don't actually know BF so yeah).
 
 ### How to use
 
-* To start the interpreter: `python fasm.py`
-  * If you want a larger board (array) to work with, specify the size: `python fasm.py 128`
-* To run a Fasm file: `python fasm.py file`
-
-**Note:** if you are running a file, the first line can be used to specify the board size
+`python fasm.py file`
 
 ### Hello World!
-**Here are two variations of a hello world program**
+**Here is an annotated example of a hello world program**
 ```
-11
-,h>,e>,l>,l>,o>, >,w>,o>,r>,l>,d<<<<<<<<<<.>.>.>.>.>.>.>.>.>.>.
-,d>,l>,r>,o>,w>, >,o>,l>,l>,e>,h.<.<.<.<.<.<.<.<.<.<.
+++++++++++ set counter to 10
+[
+	d 		> ++++++++++	set the d slot to 100
+	e		> ++++++++++	initialize the e slot with 100
+	h		> ++++++++++	initialize the h slot with 100
+	l		> +++++++++++	initialize the l slot with 110
+	o		> +++++++++++	initialize the o slot with 110
+	r		> +++++++++++	initialize the r slot with 110
+	w		> ++++++++++++	initialize the w slot with 120
+	space 	> +++			initialize the space slot with 30
+ 	<<<<<<<< -				decrement counter
+]
+>>	+		set e slot to 101
+>	++++	set h slot to 104
+>	--		set l slot to 108
+>	+		set o slot to 111
+>	++++	set r slot to 114
+>	-		set w slot to 119
+>	++		set space slot to 32
+<<<<<.	print "h"
+<.		print "e"
+>>..	print "ll"
+>.		print "o"
+>>>.	print " "
+<.		print "w"
+<<.		print "o"
+>.		print "r"
+<<.		print "l"
+<<<.	print "d"
 ```
-The first example puts all characters in "hello world" into the array, goes back to the first slot, and then progressively prints each slot.
-The second example puts all characters in "hello world" into the array **in reverse**, and then regressively prints each slot
+This example uses a loop to get ballpark values for the characters, then goes through and makes any changes necessary to the values, then goes to the various slots to print each letter at the desired time
 
 ### Reference
 * > go to next slot
 * < go to previous slot
+* + increment current slot
+* - decrement current slot
 * ^ pop the current slot
 * . return the content of the current slot
-* , put the character following this instruction into the current slot
-
-**Note:** all arithmetic instructions (+, -, *, /, %) pop the next two slots, do the operation, and put the result in the current slot (as well as prints the result)
+* , prompt for input, places input into current slot
+* [ begin a loop declaration
+* ] mark the end of a loop declaration
 
 Good luck have fun!
 
