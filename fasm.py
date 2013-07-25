@@ -20,10 +20,6 @@ class Pointer:
 		self.loc = 0
 		self.length = len(array)
 		self.array = array
-		self.looping = False
-		self.looper = []
-		self.loop_left = 'unset'
-		self.loop_right = 'unset'
 
 	def up(self):
 		self.loc += 1
@@ -53,13 +49,6 @@ class Pointer:
 		char = input(',:')
 		self.array[self.loc] = int(char) if str(char).isdigit() else ord(char)
 
-	def left_loop(self):
-		self.loop_left = self.loc
-		self.looping = True
-
-	def right_loop(self):
-		self.loop_right = self.loc
-
 	def copy(self):
 		hold = self.array[self.loc]
 		self.up()
@@ -75,8 +64,6 @@ def do(instruction, pointer, n):
 		'^': pointer.pop,
 		'.': pointer.get,
 		',': pointer.put,
-		'[': pointer.left_loop,
-		']': pointer.right_loop,
 		'/': pointer.copy
 	}
 	retr = ''
@@ -118,7 +105,7 @@ if __name__ == '__main__':
 	instructions = []
 	with open(sys.argv[1], 'r') as file:
 		instructions = parse(file.read())
-	pointer = Pointer([0 for i in range(128)])
+	pointer = Pointer([0 for i in range(1024)])
 	n = 0
 	for instruction in instructions:
 		retr = do(instruction, pointer, n)
