@@ -60,6 +60,10 @@ class Pointer:
 	def right_loop(self):
 		self.loop_right = self.loc
 
+	def copy(self):
+		val = self.array[self.loc]
+		self.array[self.loc+1] = val
+
 def do(instruction, pointer, n):
 	INSTRUCTION_MAP = {
 		'>': pointer.up,
@@ -70,7 +74,8 @@ def do(instruction, pointer, n):
 		'.': pointer.get,
 		',': pointer.put,
 		'[': pointer.left_loop,
-		']': pointer.right_loop
+		']': pointer.right_loop,
+		'/': pointer.copy
 	}
 	retr = ''
 	try:
