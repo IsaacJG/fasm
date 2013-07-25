@@ -96,4 +96,4 @@ if __name__ == '__main__':
 	for instruction in instructions:
 		retr = do(instruction, pointer)
 		if not retr == '':
-			print(retr)
+			print(retr, end='')
