@@ -55,6 +55,16 @@ class Pointer:
 		self.array[self.loc] = hold
 		self.down()
 
+def do_loop(loop, pointer, origin):
+	retr = ''
+	while pointer.array[origin] > 0:
+		for i in loop:
+			if type(i) is list:
+				retr = do_loop(i, pointer, pointer.loc)
+			else:
+				retr = do(i, pointer, n)
+	return retr or ''
+
 def do(instruction, pointer, n):
 	INSTRUCTION_MAP = {
 		'>': pointer.up,
@@ -71,10 +81,7 @@ def do(instruction, pointer, n):
 		if len(instruction) == 1:
 			retr = INSTRUCTION_MAP[instruction]()
 		else:
-			origin = pointer.loc
-			while pointer.array[origin] > 0:
-				for i in instruction:
-					INSTRUCTION_MAP[i]()
+			do_loop(instruction, pointer, pointer.loc)
 	except KeyError:
 		pass
 	except ValueError:
@@ -82,23 +89,42 @@ def do(instruction, pointer, n):
 	return retr or ''
 
 def parse(raw):
-	parsed_instructions = []
+	instructions = []
 	looping = False
 	loop = []
+	n = 0
+	loops = []
+	pos = 0
 	for c in raw:
 		if c in '><+-^.,/':
 			if not looping:
-				parsed_instructions.append(c)
-			if looping:
-				loop.append(c)
+				instructions.append(c)
+			else:
+				if len(loops) > 0:
+					loop[loops[n-1]].append(c)
+				else:
+					loop.append(c)
 		elif c == '[':
-			looping = True
+			if not looping:
+				looping = True
+			else:
+				loop.append([])
+				pos = len(loop)-1
+				loops.append(pos)
+				n += 1
 		elif c == ']':
-			looping = False
-			parsed_instructions.append(loop)
-			loop = []
-	return parsed_instructions
-
+			if n > 0:
+				loops.pop(n-1)
+				n -= 1
+				if n <= 0:
+					loops = []
+				else:
+					pos = loops[n-1]
+			else:
+				looping = False
+				instructions.append(loop)
+				loop = []
+	return instructions
 
 if __name__ == '__main__':
 	import sys
