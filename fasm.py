@@ -55,6 +55,9 @@ class Pointer:
 		self.array[self.loc] = hold
 		self.down()
 
+	def dump(self):
+		return '{0}\n'.format(self.array)
+
 def do_loop(loop, pointer, origin):
 	retr = ''
 	while pointer.array[origin] > 0:
@@ -74,7 +77,8 @@ def do(instruction, pointer, n):
 		'^': pointer.pop,
 		'.': pointer.get,
 		',': pointer.put,
-		'/': pointer.copy
+		'/': pointer.copy,
+		'*': pointer.dump
 	}
 	retr = ''
 	try:
@@ -96,7 +100,7 @@ def parse(raw):
 	loops = []
 	pos = 0
 	for c in raw:
-		if c in '><+-^.,/':
+		if c in '><+-^.,/*':
 			if not looping:
 				instructions.append(c)
 			else:
