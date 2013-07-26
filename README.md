@@ -57,6 +57,7 @@ Exact same thing, just much harder to read.
 * [ begin a loop declaration
 * ] mark the end of a loop declaration
 * / copy the current value to the next slot
+* * print the whole array (good for debugging & optimization)
 
 Good luck have fun!
 
