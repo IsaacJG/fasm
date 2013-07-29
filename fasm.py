@@ -50,11 +50,17 @@ class Pointer:
 		char = input(',:')
 		self.array[self.loc] = int(char) if str(char).isdigit() else ord(char)
 
-	def copy(self):
+	def copyup(self):
 		hold = self.array[self.loc]
 		self.up()
 		self.array[self.loc] = hold
 		self.down()
+
+	def copydown(self):
+		hold = self.array[self.loc]
+		self.down()
+		self.array[self.loc] = hold
+		self.up()
 
 	def dump(self):
 		return '{0}\n'.format(self.array)
@@ -81,7 +87,8 @@ def do(instruction, pointer, n):
 		'^': pointer.pop,
 		'.': pointer.get,
 		',': pointer.put,
-		'/': pointer.copy,
+		'/': pointer.copyup,
+		'\\': pointer.copydown,
 		'*': pointer.dump,
 		'~': pointer.toggleout
 	}
@@ -105,7 +112,7 @@ def parse(raw):
 	loops = []
 	pos = 0
 	for c in raw:
-		if c in '><+-^.,/*~':
+		if c in '><+-^.,/\\*~':
 			if not looping:
 				instructions.append(c)
 			else:
