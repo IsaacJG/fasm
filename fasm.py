@@ -20,6 +20,7 @@ class Pointer:
 		self.loc = 0
 		self.length = len(array)
 		self.array = array
+		self.cout = True
 
 	def up(self):
 		self.loc += 1
@@ -43,7 +44,7 @@ class Pointer:
 		return '{0}\n'.format(hold)
 
 	def get(self):
-		return chr(self.array[self.loc])
+		return chr(self.array[self.loc]) if self.cout else self.array[self.loc]
 
 	def put(self):
 		char = input(',:')
@@ -57,6 +58,9 @@ class Pointer:
 
 	def dump(self):
 		return '{0}\n'.format(self.array)
+
+	def toggleout(self):
+		self.cout = not self.cout
 
 def do_loop(loop, pointer, origin):
 	retr = ''
@@ -78,7 +82,8 @@ def do(instruction, pointer, n):
 		'.': pointer.get,
 		',': pointer.put,
 		'/': pointer.copy,
-		'*': pointer.dump
+		'*': pointer.dump,
+		'~': pointer.toggleout
 	}
 	retr = ''
 	try:
@@ -100,7 +105,7 @@ def parse(raw):
 	loops = []
 	pos = 0
 	for c in raw:
-		if c in '><+-^.,/*':
+		if c in '><+-^.,/*~':
 			if not looping:
 				instructions.append(c)
 			else:
