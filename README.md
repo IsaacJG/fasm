@@ -47,19 +47,7 @@ This example uses a loop to get ballpark values for the characters, then goes th
 Exact same thing, just much harder to read.
 
 ### Reference
-* > go to next slot
-* < go to previous slot
-* + increment current slot
-* - decrement current slot
-* ^ pop the current slot
-* . return the content of the current slot
-* , prompt for input, places input into current slot
-* [ begin a loop declaration
-* ] mark the end of a loop declaration
-* / copy the current value to the next slot
-* \ copy the current value to the previous slot
-* * print the whole array (good for debugging & optimization)
-* ~ toggle printing chars and ints (default is char)
+See the [official Fasm language spec](https://github.com/IsaacJG/fasm-spec#instructions)
 
 Good luck have fun!
 
