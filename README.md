@@ -57,7 +57,9 @@ Exact same thing, just much harder to read.
 * [ begin a loop declaration
 * ] mark the end of a loop declaration
 * / copy the current value to the next slot
+* \ copy the current value to the previous slot
 * * print the whole array (good for debugging & optimization)
+* ~ toggle printing chars and ints (default is char)
 
 Good luck have fun!
 
