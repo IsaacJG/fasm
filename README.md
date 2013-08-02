@@ -51,5 +51,8 @@ See the [official Fasm language spec](https://github.com/IsaacJG/fasm-spec#fasm-
 
 Good luck have fun!
 
+### Implementation Issues
+* Only supports 2 nested loops
+
 ### License
 [GPLv3](LICENSE)
