@@ -47,7 +47,7 @@ This example uses a loop to get ballpark values for the characters, then goes th
 Exact same thing, just much harder to read.
 
 ### Reference
-See the [official Fasm language spec](https://github.com/IsaacJG/fasm-spec#instructions)
+See the [official Fasm language spec](https://github.com/IsaacJG/fasm-spec#fasm-specification)
 
 Good luck have fun!
 
