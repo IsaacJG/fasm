@@ -1,6 +1,6 @@
 Fasm
 ====
-# Fasm is an esoteric language inspired by the [BF](https://en.wikipedia.org/wiki/Brainfuck)
+# Fasm is an esoteric language inspired by [BF](https://en.wikipedia.org/wiki/Brainfuck)
 This is essentially a BF clone, with some minor differences (I think, don't actually know BF so yeah), and some major additions.
 
 ### How to use
