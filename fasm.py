@@ -15,142 +15,122 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-class Pointer:
+global cout
+global routines
+
+class Cursor:
 	def __init__(self, array):
 		self.loc = 0
-		self.length = len(array)
 		self.array = array
-		self.cout = True
 
-	def up(self):
-		self.loc += 1
-		if self.loc >= self.length:
-			self.loc = 0
+def up(cursor):
+	cursor.loc += 1
+	if cursor.loc >= len(cursor.array):
+		cursor.loc = 0
 
-	def down(self):
-		self.loc -= 1
-		if self.loc < 0:
-			self.loc = self.length-1
+def down(cursor):
+	cursor.loc -= 1
+	if cursor.loc < 0:
+		cursor.loc = len(cursor.array)-1
 
-	def inc(self):
-		self.array[self.loc] += 1
+def inc(cursor):
+	cursor.array[cursor.loc] += 1
 
-	def dec(self):
-		self.array[self.loc] -= 1
+def dec(cursor):
+	cursor.array[cursor.loc] -= 1
 
-	def pop(self):
-		hold = self.array[self.loc]
-		self.array[self.loc] = 0
-		return '{0}\n'.format(hold)
+def pop(cursor):
+	hold = cursor.array[cursor.loc]
+	cursor.array[cursor.loc] = 0
+	return '{0}\n'.format(hold)
 
-	def get(self):
-		return chr(self.array[self.loc]) if self.cout else self.array[self.loc]
+def get(cursor):
+	return chr(cursor.array[cursor.loc]) if cout else cursor.array[cursor.loc]
 
-	def put(self):
-		char = input(',:')
-		self.array[self.loc] = int(char) if str(char).isdigit() else ord(char)
+def put(cursor):
+	char = input(',:')
+	cursor.array[cursor.loc] = int(char) if str(char).isdigit() else ord(char)
 
-	def copyup(self):
-		hold = self.array[self.loc]
-		self.up()
-		self.array[self.loc] = hold
-		self.down()
+def copyup(cursor):
+	hold = cursor.array[cursor.loc]
+	up(cursor)
+	cursor.array[cursor.loc] = hold
+	down(cursor)
 
-	def copydown(self):
-		hold = self.array[self.loc]
-		self.down()
-		self.array[self.loc] = hold
-		self.up()
+def copydown(cursor):
+	hold = cursor.array[cursor.loc]
+	down(cursor)
+	cursor.array[cursor.loc] = hold
+	up(cursor)
 
-	def dump(self):
-		return '{0}\n'.format(self.array)
+def dump(cursor):
+	return '{0}\n'.format(cursor.array)
 
-	def toggleout(self):
-		self.cout = not self.cout
+def togglecout():
+	cout = not cout
 
-def do_loop(loop, pointer, origin):
+def do_loop(loop, cursor, origin):
 	retr = ''
-	while pointer.array[origin] > 0:
+	while cursor.array[origin] > 0:
 		for i in loop:
 			if type(i) is list:
-				retr = do_loop(i, pointer, pointer.loc)
+				retr = do_loop(i, cursor, cursor.loc)
 			else:
-				retr = do(i, pointer, n)
+				retr = do(i, cursor, n)
 	return retr or ''
 
-def do(instruction, pointer, n):
+def do(instruction, cursor, n):
 	INSTRUCTION_MAP = {
-		'>': pointer.up,
-		'<': pointer.down,
-		'+': pointer.inc,
-		'-': pointer.dec,
-		'^': pointer.pop,
-		'.': pointer.get,
-		',': pointer.put,
-		'/': pointer.copyup,
-		'\\': pointer.copydown,
-		'*': pointer.dump,
-		'~': pointer.toggleout
+		'>': up,
+		'<': down,
+		'+': inc,
+		'-': dec,
+		'^': pop,
+		'.': get,
+		',': put,
+		'/': copyup,
+		'\\': copydown,
+		'*': dump,
+		'~': togglecout
 	}
 	retr = ''
 	try:
 		if len(instruction) == 1:
-			retr = INSTRUCTION_MAP[instruction]()
+			retr = INSTRUCTION_MAP[instruction](cursor)
 		else:
-			do_loop(instruction, pointer, pointer.loc)
+			do_loop(instruction, cursor, cursor.loc)
 	except KeyError:
 		pass
 	except ValueError:
-		retr = 'ERROR: tried to print invalid char "{0}" on instruction {1}'.format(pointer.array[pointer.loc], n)
+		retr = 'ERROR: tried to print invalid char "{0}" on instruction {1}'.format(cursor.array[cursor.loc], n)
 	return retr or ''
 
 def parse(raw):
-	instructions = []
-	looping = False
-	loop = []
-	n = 0
-	loops = []
-	pos = 0
-	for c in raw:
-		if c in '><+-^.,/\\*~':
-			if not looping:
-				instructions.append(c)
-			else:
-				if len(loops) > 0:
-					loop[loops[n-1]].append(c)
-				else:
-					loop.append(c)
-		elif c == '[':
-			if not looping:
-				looping = True
-			else:
-				loop.append([])
-				pos = len(loop)-1
-				loops.append(pos)
-				n += 1
-		elif c == ']':
-			if n > 0:
-				loops.pop(n-1)
-				n -= 1
-				if n <= 0:
-					loops = []
-				else:
-					pos = loops[n-1]
-			else:
-				looping = False
-				instructions.append(loop)
-				loop = []
-	return instructions
+	instructions = list(raw)
+	i = 0
+	while i < len(instructions):
+		if instructions[i] not in '><+-^.,/\\*~[]':
+			instructions.pop(i)
+		else:
+			instructions[i] = '\'{0}\''.format(instructions[i])
+			if '[' in instructions[i] or ']' in instructions[i]:
+				instructions[i] = instructions[i].replace('\'', '')
+			i += 1
+	instructions = ''.join(instructions).replace('\'\'', '\',\'').replace('\'[\'', '\', [\'').replace('\']\'', '\'], \'')
+	instructions = instructions.replace('\'[', '\', [').replace(']\'', '], \'')
+	instructions = '[{0}]'.format(instructions)
+	return eval(instructions)
 
 if __name__ == '__main__':
 	import sys
-	instructions = []
 	with open(sys.argv[1], 'r') as file:
-		instructions = parse(file.read())
-	pointer = Pointer([0 for i in range(1024)])
+		raw = file.read()
+		instructions = parse(raw)
+	cursor = Cursor([0 for i in range(1024)])
+	cout = True
 	n = 0
 	for instruction in instructions:
-		retr = do(instruction, pointer, n)
+		retr = do(instruction, cursor, n)
 		if not retr == '':
 			print(retr, end='')
 		n += 1
