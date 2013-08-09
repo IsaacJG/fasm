@@ -15,12 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-global cout
-
 class Cursor:
 	def __init__(self, array):
 		self.loc = 0
 		self.array = array
+		self.cout = True
 
 def up(cursor):
 	cursor.loc += 1
@@ -65,8 +64,8 @@ def copydown(cursor):
 def dump(cursor):
 	return '{0}\n'.format(cursor.array)
 
-def togglecout():
-	cout = not cout
+def togglecout(cursor):
+	cursor.cout = not cursor.cout
 
 def do_loop(loop, cursor, origin):
 	retr = ''
@@ -126,7 +125,6 @@ if __name__ == '__main__':
 		raw = file.read()
 		instructions = parse(raw)
 	cursor = Cursor([0 for i in range(1024)])
-	cout = True
 	n = 0
 	for instruction in instructions:
 		retr = do(instruction, cursor, n)
