@@ -67,15 +67,7 @@ def dump(cursor):
 def togglecout(cursor):
 	cursor.cout = not cursor.cout
 
-def do_loop(loop, cursor, origin):
-	while cursor.array[origin] > 0:
-		for i in loop:
-			if type(i) is list:
-				do_loop(i, cursor, cursor.loc)
-			else:
-				do(i, cursor, n)
-
-def do(instruction, cursor, n):
+def execute(instructions, cursor, debug=False):
 	INSTRUCTION_MAP = {
 		'>': up,
 		'<': down,
@@ -89,24 +81,35 @@ def do(instruction, cursor, n):
 		'*': dump,
 		'~': togglecout
 	}
-	retr = ''
-	try:
-		if len(instruction) == 1:
-			retr = INSTRUCTION_MAP[instruction](cursor)
+	i = 0
+	while i < len(instructions):
+		if instructions[i] == '!':
+			if debug:
+				input('Press enter to continue execution...')
+			i += 1
+			if i >= len(instructions): break
+		if len(instructions[i]) == 1:
+			retr = INSTRUCTION_MAP[instructions[i]](cursor)
+			if debug:
+				print('Executing instruction {0}: {1}, content at cursor: {2}, output: {3}'.format(i, instructions[i], cursor.array[cursor.loc], retr))
+			else:
+				if retr and not retr == '':
+					print(retr, end='')
 		else:
-			do_loop(instruction, cursor, cursor.loc)
-	except KeyError:
-		pass
-	except ValueError:
-		retr = 'ERROR: tried to print invalid char "{0}" on instruction {1}'.format(cursor.array[cursor.loc], n)
-	if retr and not retr == '':
-		print(retr, end='')
+			if debug:
+				print('Entering a loop')
+			origin = cursor.loc
+			while cursor.array[origin] > 0:
+				execute(instructions[i], cursor, debug)
+			if debug:
+				print('Exit loop')
+		i += 1
 
 def parse(raw):
 	instructions = list(raw)
 	i = 0
 	while i < len(instructions):
-		if instructions[i] not in '><+-^.,/\\*~[]':
+		if instructions[i] not in '!><+-^.,/\\*~[]':
 			instructions.pop(i)
 		else:
 			instructions[i] = '\'{0}\''.format(instructions[i])
@@ -123,8 +126,7 @@ if __name__ == '__main__':
 	with open(sys.argv[1], 'r') as file:
 		raw = file.read()
 		instructions = parse(raw)
-	cursor = Cursor([0 for i in range(1024)])
-	n = 0
-	for instruction in instructions:
-		do(instruction, cursor, n)
-		n += 1
+	if len(sys.argv) == 3 and sys.argv[2] == 'debug':
+		execute(instructions, Cursor([0 for i in range(1024)]), debug=True)
+	else:
+		execute(instructions, Cursor([0 for i in range(1024)]))
