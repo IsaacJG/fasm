@@ -16,7 +16,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
 global cout
-global routines
 
 class Cursor:
 	def __init__(self, array):
