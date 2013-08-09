@@ -68,14 +68,12 @@ def togglecout(cursor):
 	cursor.cout = not cursor.cout
 
 def do_loop(loop, cursor, origin):
-	retr = ''
 	while cursor.array[origin] > 0:
 		for i in loop:
 			if type(i) is list:
-				retr = do_loop(i, cursor, cursor.loc)
+				do_loop(i, cursor, cursor.loc)
 			else:
-				retr = do(i, cursor, n)
-	return retr or ''
+				do(i, cursor, n)
 
 def do(instruction, cursor, n):
 	INSTRUCTION_MAP = {
@@ -101,7 +99,8 @@ def do(instruction, cursor, n):
 		pass
 	except ValueError:
 		retr = 'ERROR: tried to print invalid char "{0}" on instruction {1}'.format(cursor.array[cursor.loc], n)
-	return retr or ''
+	if retr and not retr == '':
+		print(retr, end='')
 
 def parse(raw):
 	instructions = list(raw)
@@ -127,7 +126,5 @@ if __name__ == '__main__':
 	cursor = Cursor([0 for i in range(1024)])
 	n = 0
 	for instruction in instructions:
-		retr = do(instruction, cursor, n)
-		if not retr == '':
-			print(retr, end='')
+		do(instruction, cursor, n)
 		n += 1
