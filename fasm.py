@@ -43,7 +43,7 @@ def pop(cursor):
 	return '{0}\n'.format(hold)
 
 def get(cursor):
-	return chr(cursor.array[cursor.loc]) if cout else cursor.array[cursor.loc]
+	return chr(cursor.array[cursor.loc]) if cursor.cout else cursor.array[cursor.loc]
 
 def put(cursor):
 	char = input(',:')
